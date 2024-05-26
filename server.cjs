@@ -38,18 +38,15 @@ function handleDisconnect() {
 handleDisconnect();
 
 app.post('/api/login', (req, res) => {
-  const { username, password, userType } = req.body;
-
-  const query = `SELECT * FROM Login WHERE username = ? AND password = ? AND role = ?`;
-
-  db.query(query, [username, password, userType], (err, results) => {
+  const { username, password } = req.body;
+  const query = `SELECT * FROM signup WHERE username = ? AND password = ?`;
+  db.query(query, [username, password], (err, results) => {
     if (err) {
       console.error('Error fetching data from MySQL:', err);
       res.status(500).json({ error: 'Internal Server Error' });
     } else if (results.length === 0) {
       res.status(401).json({ error: 'Invalid username or password.' });
     } else {
-      req.userType = userType;
       res.json({ message: 'Login successful!' });
     }
   });
@@ -64,6 +61,50 @@ app.get('/api/signup', (req, res) => {
       res.status(500).json({ error: 'Internal Server Error' });
     } else {
       res.json({ signupData: results });
+    }
+  });
+});
+
+app.post('/api/signup', (req, res) => {
+  const { username, password, userid } = req.body;
+  if (!username || !password || !userid) {
+    return res.status(400).json({ error: 'Missing required data' });
+  }
+  const query = 'INSERT INTO signup (username, password, userid) VALUES (?, ?, ?)';
+  const values = [username, password, userid];
+  db.query(query, values, (err, results) => {
+    if (err) {
+      console.error('Error inserting data into signup table:', err);
+      res.status(500).json({ error: 'Internal Server Error' });
+    } else {
+      res.json({ message: 'Data inserted successfully' });
+    }
+  });
+});
+
+app.put('/api/signup/:userid', (req, res) => {
+  const userid = req.params.userid;
+  const { username, password, userid: newuserid } = req.body;
+  const query = 'UPDATE signup SET username=?, password=?, userid=? WHERE userid=?';
+  db.query(query, [username, password, newuserid, userid], (err, results) => {
+    if (err) {
+      console.error('Error updating data:', err);
+      res.status(500).json({ error: 'Internal Server Error' });
+    } else {
+      res.json({ message: 'Record updated successfully' });
+    }
+  });
+});
+
+app.delete('/api/signup/:userid', (req, res) => {
+  const userid = req.params.userid;
+  const query = 'DELETE FROM signup WHERE userid=?';
+  db.query(query, [userid], (err, results) => {
+    if (err) {
+      console.error('Error deleting data:', err);
+      res.status(500).json({ error: 'Internal Server Error' });
+    } else {
+      res.json({ message: 'Record deleted successfully' });
     }
   });
 });
