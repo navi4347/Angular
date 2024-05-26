@@ -1,16 +1,21 @@
 <!DOCTYPE html>
 <!--Login.compoent.html -->
-<form (ngSubmit)="onSubmit($event)">
-    <div>
-        <label for="username">Username:</label>
-        <input type="text" id="username" name="username" [(ngModel)]="username" required>
-    </div>
-    <div>
-        <label for="password">Password:</label>
-        <input type="password" id="password" name="password" [(ngModel)]="password" required>
-    </div>
-    <div>
-        <button type="submit">Login</button>
-    </div>
-    <p *ngIf="loginError" style="color: red;">Wrong credentials. Please try again.</p>
-</form>
+<section id="login">
+<div class="login">
+    <form (ngSubmit)="onSubmit($event)">
+        <div>
+            <label for="username">Username:</label>
+            <input type="text" id="username" name="username" [(ngModel)]="username" autocomplete="off" required>
+        </div>
+        <div>
+            <label for="password">Password:</label>
+            <input type="password" id="password" name="password" [(ngModel)]="password" autocomplete="off" required>
+        </div>
+        <div>
+            <button type="submit">Login</button>
+        </div>
+        <p *ngIf="loginError" style="color: red;">Wrong credentials. Please try again.</p>
+    </form>
+</div>
+</section>
+

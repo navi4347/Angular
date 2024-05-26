@@ -1,5 +1,10 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
+import { HttpClient } from '@angular/common/http';
+
+interface LoginResponse {
+  message: string;
+}
 
 @Component({
   selector: 'app-login',
@@ -11,21 +16,24 @@ export class LoginComponent {
   password: string = '';
   loginError: boolean = false;
 
-  constructor(private router: Router) {}
+  constructor(private router: Router, private http: HttpClient) {}
 
   onSubmit(event: Event) {
-    if (this.username === 'admin' && this.password === 'Password') {
-      this.router.navigate(['/home']);
-    } else {
-      this.loginError = true;
-      this.username = '';
-      this.password = '';
-      setTimeout(() => {
-        this.loginError = false; 
-      }, 1000); 
-    }
-    if (event) {
-      event.preventDefault();
-    }
+    event.preventDefault();
+
+    this.http.post<LoginResponse>('/api/login', { username: this.username, password: this.password })
+      .subscribe(
+        (response) => {
+          this.router.navigate(['/home']);
+        },
+        (error) => {
+          this.loginError = true;
+          this.username = '';
+          this.password = '';
+          setTimeout(() => {
+            this.loginError = false; 
+          }, 3000);
+        }
+      );
   }
 }
