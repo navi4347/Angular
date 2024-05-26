@@ -70,6 +70,7 @@
         },
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
+          "options": {"host": "0.0.0.0"},
           "configurations": {
             "production": {
               "buildTarget": "Login:build:production"
@@ -106,5 +107,8 @@
         }
       }
     }
+  },
+  "cli": {
+    "analytics": "cadf48fb-337c-4a19-9ce5-00899476ff56"
   }
 }
