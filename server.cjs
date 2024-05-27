@@ -45,9 +45,9 @@ app.post('/api/login', (req, res) => {
       console.error('Error fetching data from MySQL:', err);
       res.status(500).json({ error: 'Internal Server Error' });
     } else if (results.length === 0) {
-      res.status(401).json({ error: 'Invalid username or password.' });
+      res.status(401).json({ error: 'Invalid username or password.', username, password });
     } else {
-      res.json({ message: 'Login successful!' });
+      res.status(200).json({ message: 'Login successful!', username, password });
     }
   });
 });
@@ -60,7 +60,7 @@ app.get('/api/signup', (req, res) => {
       console.error('Error fetching data from signup table:', err);
       res.status(500).json({ error: 'Internal Server Error' });
     } else {
-      res.json({ message: 'Data Fetched successfully' });
+      res.json({  signupData: results });
     }
   });
 });

@@ -1,13 +1,19 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 
+interface SignupData {
+  userid: string;
+  username: string;
+  password: string;
+}
+
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.css']
 })
 export class HomeComponent implements OnInit {
-  signupData: any[] = [];
+  signupData: SignupData[] = []; 
 
   constructor(private http: HttpClient) { }
 
@@ -16,10 +22,10 @@ export class HomeComponent implements OnInit {
   }
 
   fetchSignupData(): void {
-    this.http.get<{ signupData: any[] }>('http://localhost:5000/api/signup')
+    this.http.get<{ signupData: SignupData[] }>('http://localhost:5000/api/signup')
       .subscribe(
         response => {
-          this.signupData = response.signupData;
+          this.signupData = response.signupData || []; 
         },
         error => {
           console.error('Error fetching data from API:', error);
