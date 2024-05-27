@@ -11,9 +11,9 @@
         <input type="password" id="password" name="password" [(ngModel)]="password" autocomplete="off" required>
       </div>
       <div>
-        <button type="submit" (click)="login()">Login</button>
+        <button type="submit">Login</button>
       </div>
-      <p *ngIf="loginError" style="color: red;">Wrong credentials. Please try again.</p>
+      <p *ngIf="loginError" style="color: red;">{{ errorMessage }}</p>
     </form>
   </div>
 </section>

@@ -12,15 +12,20 @@ export class HomeComponent implements OnInit {
   constructor(private http: HttpClient) { }
 
   ngOnInit(): void {
-    this.fetchsignupData();
+    this.fetchSignupData();
   }
 
-  fetchsignupData(): void {
+  fetchSignupData(): void {
     this.http.get<{ signupData: any[] }>('http://localhost:5000/api/signup')
-      .subscribe(response => {
-        this.signupData = response.signupData;
-      }, error => {
-        console.error('Error fetching data from API:', error);
-      });
+      .subscribe(
+        response => {
+          console.log('Response received:', response); 
+          this.signupData = response.signupData;
+        },
+        error => {
+          console.error('Error fetching data from API:', error);
+        }
+      );
   }
+  
 }
