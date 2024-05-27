@@ -70,14 +70,28 @@ app.post('/api/signup', (req, res) => {
   if (!username || !password || !userid) {
     return res.status(400).json({ error: 'Missing required data' });
   }
-  const query = 'INSERT INTO signup (username, password, userid) VALUES (?, ?, ?)';
-  const values = [username, password, userid];
-  db.query(query, values, (err, results) => {
-    if (err) {
-      console.error('Error inserting data into signup table:', err);
-      res.status(500).json({ error: 'Internal Server Error' });
+
+  const selectQuery = 'SELECT * FROM signup WHERE username = ? OR userid = ?';
+  const selectValues = [username, userid];
+
+  db.query(selectQuery, selectValues, (selectErr, selectResults) => {
+    if (selectErr) {
+      console.error('Error selecting data from signup table:', selectErr);
+      return res.status(500).json({ error: 'Internal Server Error' });
+    }
+
+    if (selectResults.length > 0) {
+      return res.status(409).json({ error: 'Username or UserID already exists' });
     } else {
-      res.json({ message: 'Data inserted successfully' });
+      const insertQuery = 'INSERT INTO signup (username, password, userid) VALUES (?, ?, ?)';
+      const insertValues = [username, password, userid];
+      db.query(insertQuery, insertValues, (insertErr, insertResults) => {
+        if (insertErr) {
+          console.error('Error inserting data into signup table:', insertErr);
+          return res.status(500).json({ error: 'Internal Server Error' });
+        }
+        res.json({ message: 'Data inserted successfully' });
+      });
     }
   });
 });

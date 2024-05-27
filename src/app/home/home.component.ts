@@ -41,33 +41,54 @@ export class HomeComponent implements OnInit, OnDestroy {
         }
       );
   }
-
+  resetInputs(): void {
+    this.userid = '';
+    this.username = '';
+    this.password = '';
+  }
+  
   onSubmit(): void {
     const data = {
       userid: this.userid,
       username: this.username,
       password: this.password
     };
-
+  
     this.signupService.addSignupData(data).subscribe(
       response => {
         console.log('Data inserted successfully:', response);
-        this.userid = '';
-        this.username = '';
-        this.password = '';
+        this.resetInputs();
         this.errorMessage = '';
+        this.isAdding = false; 
         this.fetchSignupData();
       },
       error => {
         console.error('Error inserting data:', error);
-        this.errorMessage = 'Error inserting data. Please try again.';
+        this.resetInputs();
+        if (error && error.status === 409) {
+          const errorResponse = error.error;
+          if (errorResponse && errorResponse.message) {
+            if (errorResponse.message.includes('userid')) {
+              this.errorMessage = 'User ID already exists in records.';
+            } else if (errorResponse.message.includes('username')) {
+              this.errorMessage = 'Username already exists in records.';
+            } else {
+              this.errorMessage = 'Duplicate record found.';
+            }
+          } else {
+            this.errorMessage = 'User Details already exist in records.';
+          }
+        } else {
+          this.errorMessage = 'An unexpected error occurred. Please try again later.';
+        }
       }
     );
-  }
-
+  }  
+  
   editSignup(pair: SignupData): void {
     this.editedUser = { ...pair };
     this.isEditing = true;
+    this.isAdding = false;
   }
 
   updateSignup(): void {
@@ -88,11 +109,15 @@ export class HomeComponent implements OnInit, OnDestroy {
     this.editedUser = { userid: '', username: '', password: '' };
     this.isEditing = false;
   }
-
+  
   cancelAction(): void {
+    this.userid = '';
+    this.username = '';
+    this.password = '';
     this.isAdding = false;
     this.isEditing = false;
   }
+  
 
   deleteSignup(userid: string): void {
     this.signupService.deleteSignupData(userid).subscribe(
@@ -108,6 +133,8 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   showAddForm(): void {
     this.isAdding = true;
+    this.isEditing = false; 
+    this.errorMessage = ''; 
   }
 
   ngOnDestroy() {

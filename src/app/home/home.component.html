@@ -1,78 +1,85 @@
-<section class="home">
+<section id='home' class="home">
   <div class="container">
     <div class="row">
       <div class="col-lg">
         <h1>Fetch signup data</h1>
       </div>
       <div class="col-lg">
-        <button class="add-data-button" (click)="showAddForm()">Add Data</button>
+        <button class="add" (click)="showAddForm()">Add Data</button>
       </div>
     </div>
   </div>
-  <div class="row">
-      <div class="sidebar" [ngClass]="{'active': isAdding || isEditing, 'slide-right': isAdding || isEditing}">
-        <h2>{{ isAdding ? 'Add User' : 'Edit User' }}</h2>
-        <form *ngIf="isAdding" (submit)="onSubmit()">
-          <div>
-            <label for="userid">UserID:</label>
-            <input type="text" id="userid" name="userid" [(ngModel)]="userid" autocomplete="off" required>
-          </div>
-          <div>
-            <label for="username">Username:</label>
-            <input type="text" id="username" name="username" [(ngModel)]="username" autocomplete="off" required>
-          </div>
-          <div>
-            <label for="password">Password:</label>
-            <input type="password" id="password" name="password" [(ngModel)]="password" autocomplete="off" required>
-          </div>
-          <div>
-            <button type="submit">Add User</button>
-          </div>
-          <p *ngIf="errorMessage" class="error-message">{{ errorMessage }}</p>
-        </form>
-        <form *ngIf="isEditing" (submit)="updateSignup()">
-          <div>
-            <label for="edit-userid">UserID:</label>
-            <input type="text" id="edit-userid" name="edit-userid" [(ngModel)]="editedUser.userid" autocomplete="off" required>
-          </div>
-          <div>
-            <label for="edit-username">Username:</label>
-            <input type="text" id="edit-username" name="edit-username" [(ngModel)]="editedUser.username" autocomplete="off" required>
-          </div>
-          <div>
-            <label for="edit-password">Password:</label>
-            <input type="password" id="edit-password" name="edit-password" [(ngModel)]="editedUser.password" autocomplete="off" required>
-          </div>
-          <div>
-            <button type="submit">Update</button>
-            <button type="button" (click)="cancelEdit()">Cancel</button>
-          </div>
-        </form>
-        <button (click)="cancelAction()">Cancel</button>
+  <div class="container">
+    <div class="row">
+      <div class="col-8">
+        <div class="home">
+          <table *ngIf="signupData.length > 0">
+            <thead>
+              <tr>
+                <th>userid</th>
+                <th>username</th>
+                <th>password</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let pair of signupData">
+                <td>{{ pair.userid }}</td>
+                <td>{{ pair.username }}</td>
+                <td>{{ pair.password }}</td>
+                <td>
+                  <button class="update" (click)="editSignup(pair)">Edit</button> 
+                  <button class="cancel" (click)="deleteSignup(pair.userid)">Delete</button> 
+                </td>
+              </tr>
+            </tbody>
+          </table>
+          <p *ngIf="signupData.length === 0">No data available.</p>
+        </div>    
+      </div>
+      <div class="col-4">
+        <div class="sidebar" [ngClass]="{'active': isAdding || isEditing, 'slide-right': isAdding || isEditing}">
+          <h2>{{ isAdding ? 'Add User' : 'Edit User' }}</h2>
+          <form *ngIf="isAdding" (submit)="onSubmit()">
+            <div>
+              <label for="userid">UserID:</label>
+              <input type="text" id="userid" name="userid" [(ngModel)]="userid" autocomplete="off" required>
+            </div>
+            <div>
+              <label for="username">Username:</label>
+              <input type="text" id="username" name="username" [(ngModel)]="username" autocomplete="off" required>
+            </div>
+            <div>
+              <label for="password">Password:</label>
+              <input type="password" id="password" name="password" [(ngModel)]="password" autocomplete="off" required>
+            </div>
+            <div>
+              <button class="add" type="submit">Add User</button>
+              <button type="button" class="ecancel" (click)="cancelAction()">Cancel</button>
+            </div>
+            <p *ngIf="errorMessage" class="error-message">{{ errorMessage }}</p>
+          </form>
+  
+          <form *ngIf="isEditing" (submit)="updateSignup()">
+            <div>
+              <label for="edit-userid">UserID:</label>
+              <input type="text" id="edit-userid" name="edit-userid" [(ngModel)]="editedUser.userid" autocomplete="off" required disabled>
+            </div>
+            <div>
+              <label for="edit-username">Username:</label>
+              <input type="text" id="edit-username" name="edit-username" [(ngModel)]="editedUser.username" autocomplete="off" required>
+            </div>
+            <div>
+              <label for="edit-password">Password:</label>
+              <input type="password" id="edit-password" name="edit-password" [(ngModel)]="editedUser.password" autocomplete="off" required>
+            </div>
+            <div>
+              <button type="submit" class="eupdate">Update</button>
+              <button type="button" class="ecancel" (click)="cancelEdit()">Cancel</button>
+            </div>
+          </form>
+        </div>  
       </div>
     </div>
-  <div class="home">
-    <table *ngIf="signupData.length > 0">
-      <thead>
-        <tr>
-          <th>userid</th>
-          <th>username</th>
-          <th>password</th>
-          <th>Action</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let pair of signupData">
-          <td>{{ pair.userid }}</td>
-          <td>{{ pair.username }}</td>
-          <td>{{ pair.password }}</td>
-          <td>
-            <button (click)="editSignup(pair)">Edit</button> 
-            <button (click)="deleteSignup(pair.userid)">Delete</button> 
-          </td>
-        </tr>
-      </tbody>
-    </table>
-    <p *ngIf="signupData.length === 0">No data available.</p>
   </div>
 </section>
