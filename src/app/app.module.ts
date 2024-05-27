@@ -1,6 +1,10 @@
+// Import necessary modules
 import { NgModule } from '@angular/core';
-import { BrowserModule, provideClientHydration } from '@angular/platform-browser';
+import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule } from '@angular/forms'; 
+import { HttpClientModule, HttpClient } from '@angular/common/http';
+
+// Import other components and services
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { LoginComponent } from './login/login.component';
@@ -19,10 +23,11 @@ import { SignupComponent } from './signup/signup.component';
   imports: [
     BrowserModule,
     AppRoutingModule,
+    HttpClientModule,
     FormsModule 
   ],
   providers: [
-    provideClientHydration()
+    { provide: HttpClient, useClass: HttpClient, deps: [] }, 
   ],
   bootstrap: [AppComponent]
 })

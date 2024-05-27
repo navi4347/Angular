@@ -3,7 +3,7 @@ const mysql = require('mysql2');
 const cors = require('cors');
 
 const app = express();
-const port = process.env.PORT || 5000;
+const port = 5000;
 
 app.use(cors());
 app.use(express.json());
@@ -110,10 +110,10 @@ app.delete('/api/signup/:userid', (req, res) => {
 });
 
 app.use((err, req, res, next) => {
-    console.error('Unexpected error:', err);
-    res.status(500).json({ error: 'Internal Server Error' });
-  });
-  
-  app.listen(port, () => {
-    console.log(`Server is running on port ${port}`);
-  });
+  console.error('Unexpected error:', err);
+  res.status(500).json({ error: 'Internal Server Error' });
+});
+
+app.listen(port, () => {
+  console.log(`Server is running on port ${port}`);
+});

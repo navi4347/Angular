@@ -4,6 +4,7 @@ import { HttpClient } from '@angular/common/http';
 
 interface LoginResponse {
   message: string;
+  error?: string;
 }
 
 @Component({
@@ -20,11 +21,22 @@ export class LoginComponent {
 
   onSubmit(event: Event) {
     event.preventDefault();
-
-    this.http.post<LoginResponse>('/api/login', { username: this.username, password: this.password })
+    this.login();
+  }
+  login() {
+    this.http.post<LoginResponse>('http://localhost:5000/api/login', { username: this.username, password: this.password })
       .subscribe(
         (response) => {
-          this.router.navigate(['/home']);
+          if (response.error) {
+            this.loginError = true;
+            this.username = '';
+            this.password = '';
+            setTimeout(() => {
+              this.loginError = false;
+            }, 3000);
+          } else {
+            this.router.navigate(['/home']);
+          }
         },
         (error) => {
           this.loginError = true;
