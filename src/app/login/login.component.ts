@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
+import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'app-login',
@@ -12,7 +13,7 @@ export class LoginComponent {
   loginError: boolean = false;
   errorMessage: string = '';
 
-  constructor(private router: Router) {}
+  constructor(private router: Router, private http: HttpClient) {}
 
   onSubmit(event: Event) {
     event.preventDefault();
@@ -20,16 +21,20 @@ export class LoginComponent {
   }
 
   login() {
-    if (this.username === 'username' && this.password === 'password') {
-      this.router.navigate(['/home']);
-    } else {
-      this.loginError = true;
-      this.errorMessage = 'Invalid username or password';
-      this.username = '';
-      this.password = '';
-      setTimeout(() => {
-        this.loginError = false;
-      }, 3000);
-    }
+    this.http.post<any>('http://localhost:5000/api/login', { username: this.username, password: this.password })
+      .subscribe(
+        response => {
+          this.router.navigate(['/home']);
+        },
+        error => {
+          this.loginError = true;
+          this.errorMessage = 'Invalid username or password';
+          this.username = '';
+          this.password = '';
+          setTimeout(() => {
+            this.loginError = false;
+          }, 3000);
+        }
+      );
   }
 }
