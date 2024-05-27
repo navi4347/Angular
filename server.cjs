@@ -60,7 +60,7 @@ app.get('/api/signup', (req, res) => {
       console.error('Error fetching data from signup table:', err);
       res.status(500).json({ error: 'Internal Server Error' });
     } else {
-      res.json({ signupData: results });
+      res.json({ message: 'Data Fetched successfully' });
     }
   });
 });

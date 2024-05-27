@@ -19,7 +19,6 @@ export class HomeComponent implements OnInit {
     this.http.get<{ signupData: any[] }>('http://localhost:5000/api/signup')
       .subscribe(
         response => {
-          console.log('Response received:', response); 
           this.signupData = response.signupData;
         },
         error => {
@@ -27,5 +26,4 @@ export class HomeComponent implements OnInit {
         }
       );
   }
-  
 }

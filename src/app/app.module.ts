@@ -11,6 +11,7 @@ import { LoginComponent } from './login/login.component';
 import { HomeComponent } from './home/home.component';
 import { NotfoundComponent } from './notfound/notfound.component';
 import { SignupComponent } from './signup/signup.component';
+import { provideHttpClient, withFetch } from '@angular/common/http';
 
 @NgModule({
   declarations: [
@@ -26,7 +27,9 @@ import { SignupComponent } from './signup/signup.component';
     HttpClientModule,
     FormsModule 
   ],
- 
+  providers: [
+    provideHttpClient(withFetch())
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

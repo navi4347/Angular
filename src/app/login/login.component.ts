@@ -21,9 +21,10 @@ export class LoginComponent {
   }
 
   login() {
-    this.http.post<any>('http://localhost:5000/api/login', { username: this.username, password: this.password })
+    this.http.post('http://localhost:5000/api/login', { username: this.username, password: this.password }, { responseType: 'text' })
       .subscribe(
         response => {
+          const jsonResponse = JSON.parse(response);
           this.router.navigate(['/home']);
         },
         error => {
